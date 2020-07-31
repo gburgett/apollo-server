@@ -254,6 +254,7 @@ export abstract class RESTDataSource<TContext = any> extends DataSource {
           ? options.cacheOptions
           : this.cacheOptionsFor && this.cacheOptionsFor.bind(this);
         try {
+          console.log('do fetch', request.url)
           const response = await this.httpCache.fetch(request, {
             cacheKey,
             cacheOptions,

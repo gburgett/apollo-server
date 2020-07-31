@@ -25,6 +25,7 @@
     "http-cache-semantics": "^4.0.0"
   },
   "devDependencies": {
-    "apollo-server-types": "file:../apollo-server-types"
+    "apollo-server-types": "file:../apollo-server-types",
+    "nock": "^13.0.3"
   }
 }

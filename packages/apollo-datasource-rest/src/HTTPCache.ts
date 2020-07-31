@@ -38,6 +38,7 @@ export class HTTPCache {
     const entry = await this.keyValueCache.get(cacheKey);
     if (!entry) {
       const response = await this.httpFetch(request);
+      console.log('initial get', request.url, response.status)
 
       const policy = new CachePolicy(
         policyRequestFrom(request),
@@ -65,11 +66,13 @@ export class HTTPCache {
         policy.satisfiesWithoutRevalidation(policyRequestFrom(request)))
     ) {
       const headers = policy.responseHeaders();
-      return new Response(body, {
+      const resp = new Response(body, {
         url: policy._url,
         status: policy._status,
         headers,
       });
+      console.log('from cache', request.url, resp.status)
+      return resp
     } else {
       const revalidationHeaders = policy.revalidationHeaders(
         policyRequestFrom(request),
@@ -78,6 +81,7 @@ export class HTTPCache {
         headers: revalidationHeaders,
       });
       const revalidationResponse = await this.httpFetch(revalidationRequest);
+      console.log('revalidation', revalidationRequest.url, revalidationResponse.status)
 
       const { policy: revalidatedPolicy, modified } = policy.revalidatedPolicy(
         policyRequestFrom(revalidationRequest),
